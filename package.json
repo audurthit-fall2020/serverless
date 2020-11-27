@@ -1,0 +1,22 @@
+{
+  "name": "serverless",
+  "version": "1.0.0",
+  "description": "Lambda function for sending emails",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trivedhaudurthi/serverless.git"
+  },
+  "author": "Trivedh Audurthi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/trivedhaudurthi/serverless/issues"
+  },
+  "homepage": "https://github.com/trivedhaudurthi/serverless#readme",
+  "dependencies": {
+    "aws-sdk": "^2.799.0"
+  }
+}
