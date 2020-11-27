@@ -38,20 +38,20 @@ jobs:
       - name: Update lambda function
         run: |
           version1=`aws lambda get-alias --function-name ${{ matrix.function }} --name ${{ matrix.alias }} | jq '.FunctionVersion'`
-          echo "version before deploy: $version1"
           zip -r function.zip index.js
           version2=`aws lambda update-function-code \
                   --function-name ${{ matrix.function }} \
                   --zip-file fileb://function.zip \
                   --publish | jq .Version`
-          echo "version after deploy: $version2"   
       - name: Push revision to S3
         run: |
+          echo "version before deploy: $version1"
+          echo "version after deploy: $version2"   
           echo "{\"version\":0.0,\"Resources\":[{\"${{matrix.function}}\":{\"Type\":\"AWS::Lambda::Function\",\"Properties\":{\"Name\":\"${{matrix.function}}\",\"Alias\":\"${{matrix.alias}}\",\"CurrentVersion\":$version1,\"TargetVersion\":$version2}}}]}"> ${{matrix.s3-key}}.json
           aws s3 cp ${{matrix.s3-key}}.json s3://codedeploy.$account.trivedhaudurthi.me
         env:
           account: ${{secrets.ACCOUNT}}
-      - name: Deploy application on EC2
+      - name: Deploy Lambda Function
         run: |
           aws deploy create-deployment \
           --application-name ${{matrix.appname}} \
