@@ -35,7 +35,7 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
           aws-region: ${{matrix.region}}
-      - name: Update lambda function
+      - name: Update lambda function and Push revision to S3
         run: |
           version1=`aws lambda get-alias --function-name ${{ matrix.function }} --name ${{ matrix.alias }} | jq '.FunctionVersion'`
           zip -r function.zip index.js
@@ -43,8 +43,6 @@ jobs:
                   --function-name ${{ matrix.function }} \
                   --zip-file fileb://function.zip \
                   --publish | jq .Version`
-      - name: Push revision to S3
-        run: |
           echo "version before deploy: $version1"
           echo "version after deploy: $version2"   
           echo "{\"version\":0.0,\"Resources\":[{\"${{matrix.function}}\":{\"Type\":\"AWS::Lambda::Function\",\"Properties\":{\"Name\":\"${{matrix.function}}\",\"Alias\":\"${{matrix.alias}}\",\"CurrentVersion\":$version1,\"TargetVersion\":$version2}}}]}"> ${{matrix.s3-key}}.json
