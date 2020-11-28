@@ -57,11 +57,9 @@ exports.handler=async (event,context)=>{
         ${message.answer_url?'<h2> Answer has been posted/updated </h2>':'<h2>An answer has been deleted</h2>'}
         <p>User email: ${message.user_email}</p>
         <p>Question id: ${message.question_id}</p>
-        ${message.answer_url?``:``}<p>Answer id: ${message.answer_id}</p>
-        <p>Time: ${message.updated_timestamp?message.updated_timestamp:message.created_timestamp}</p>
-        <a href=${message.question_url}>${message.question_url}</a>
-        ${message.answer_url?`<p>Time: ${message.updated_timestamp?message.updated_timestamp:message.created_timestamp}</p>
-        <a href=${message.answer_url}>${message.answer_url}</a>
+        ${message.answer_url?`<p>Answer id: ${message.answer_id}</p><p>Time: ${message.updated_timestamp?message.updated_timestamp:message.created_timestamp}</p>`:``}
+        <a href=${message.question_url}>Question URL</a>
+        ${message.answer_url?`<a href=${message.answer_url}>Answer URL</a>
         <p>Answer Text: ${message.answer_text}</p>`:``}
         </body>
         </html>`
