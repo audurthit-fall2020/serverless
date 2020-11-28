@@ -2,7 +2,7 @@ const AWS= require('aws-sdk');
 exports.handler=async (event,context)=>{
     try{
         const table=process.env.table;
-        const docClient= new AWS.DynamoDB.DocumentClient();
+        const docClient= new AWS.DynamoDB();
         console.log("connected to DynamoDB");
         // const messageID= event.Records[0].Sns.MessageId;
         const fun=(s)=>{
@@ -18,15 +18,25 @@ exports.handler=async (event,context)=>{
         var params={
             TableName:table,
             Key:{
-                "id":messageID
+                "id":{
+                    N: `${messageID}`
+                }
             }
         };
-        const {Item}=await docClient.get(params).promise();
+        const {Item}=await docClient.getItem(params).promise();
         if(Item){
             console.log("Duplicate message found");
             return;
         }
-        await docClient.put(params).promise();
+        var put_params={
+            TableName:table,
+            Item:{
+                "id":{
+                    N: `${messageID}`
+                }
+            }
+        };
+        await docClient.putItem(put_params).promise();
         console.log("Created record in DynamoDb");
         const message =JSON.parse(event.Records[0].Sns.Message);
         console.log(message);
