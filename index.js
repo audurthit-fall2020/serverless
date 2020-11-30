@@ -6,8 +6,11 @@ exports.handler=async (event,context)=>{
         console.log("connected to DynamoDB");
         // const messageID= event.Records[0].Sns.MessageId;
         const fun=(s)=>{
+            s=s.split(/\r\n|\r|\n/g).join("");
             var hash = 0, i, chr;
             for (i = 0; i < s.length; i++) {
+              if(s.charAt(i)===' ')
+                continue;  
               chr   = s.charCodeAt(i);
               hash  = ((hash << 5) - hash) + chr;
               hash |= 0; // Convert to 32bit integer
