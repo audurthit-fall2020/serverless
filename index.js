@@ -38,8 +38,8 @@ exports.handler=async (event,context)=>{
         };
         await docClient.putItem(put_params).promise();
         console.log("Created record in DynamoDb");
+        console.log(event.Records[0].Sns.Message);
         const message =JSON.parse(event.Records[0].Sns.Message);
-        console.log(message);
         const body=`<!DOCTYPE html>
         <html>
         <head>
